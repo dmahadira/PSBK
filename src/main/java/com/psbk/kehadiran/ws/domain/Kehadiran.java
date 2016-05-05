@@ -8,23 +8,20 @@ package com.psbk.kehadiran.ws.domain;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author Denny
  */
+
 @Entity
 @Table(name = "tb_kehadiran")
 public class Kehadiran implements Serializable {
 
-    @Id
+    @Id @GeneratedValue
     @Column(name = "id_kehadiran", length =3)
     private String idKehadiran;
 
@@ -35,7 +32,7 @@ public class Kehadiran implements Serializable {
     private int presensiDosen;
 
     @Column(name = "status", nullable = false, length = 15)
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private String status;
 
     @Column(name = "nrp", nullable = false, length = 15)
@@ -166,9 +163,9 @@ public class Kehadiran implements Serializable {
         this.sks = sks;
     }
     
-    public enum status {
-        Hadir, TidakHadir
-    }
+//    public enum status {
+//        Hadir, TidakHadir
+//    }
     
     @Override
     public String toString() {
