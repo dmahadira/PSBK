@@ -8,6 +8,8 @@ package com.psbk.kehadiran.ws.domain;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,60 +25,59 @@ import org.hibernate.annotations.GenericGenerator;
 public class Kehadiran implements Serializable {
 
     @Id
-    @Column(name = "id_kehadiran", length =150)
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @Column(name = "id_kehadiran", length =3)
     private String idKehadiran;
 
-    @Column(name = "presensi_mahasiswa")
+    @Column(name = "presensi_mahasiswa", nullable= false)
     private int presensiMahasiswa;
 
-    @Column(name = "presensi_dosen")
+    @Column(name = "presensi_dosen", nullable= false)
     private int presensiDosen;
 
-    @Column(name = "status", length = 15)
+    @Column(name = "status", nullable = false, length = 15)
+    @Enumerated(EnumType.STRING)
     private String status;
 
-    @Column(name = "nrp", length = 15)
+    @Column(name = "nrp", nullable = false, length = 15)
     private String nrp;
 
-    @Column(name = "nama_mahasiswa", length = 40)
+    @Column(name = "nama_mahasiswa", nullable = false, length = 40)
     private String namaMahasiswa;
 
-    @Column(name = "id_dosen", length = 15)
+    @Column(name = "id_dosen", nullable = false, length = 15)
     private String idDosen;
 
-    @Column(name = "nama_dosen", length = 40)
+    @Column(name = "nama_dosen", nullable = false, length = 40)
     private String namaDosen;
 
-    @Column(name = "kode_matakuliah", length = 8)
+    @Column(name = "kode_matakuliah", nullable = false, length = 8)
     private String kodeMatakuliah;
 
-    @Column(name = "nama_matakuliah", length = 40)
+    @Column(name = "nama_matakuliah", nullable = false, length = 40)
     private String namaMatakuliah;
 
-    @Column(name = "sks")
+    @Column(name = "sks", nullable = false)
     private int sks;
 
-//    public Kehadiran() {
-//    }
-//
-//    public Kehadiran(String idKehadiran, int presensiMahasiswa, int presensiDosen, String status,
-//            String nrp, String namaMahasiswa, String idDosen, String namaDosen,
-//            String kodeMatakuliah, String namaMatakuliah, int sks) {
-//        this.idKehadiran = idKehadiran;
-//        this.presensiMahasiswa = presensiMahasiswa;
-//        this.presensiDosen = presensiDosen;
-//        this.status = status;
-//        this.nrp = nrp;
-//        this.namaMahasiswa = namaMahasiswa;
-//        this.idDosen = idDosen;
-//        this.namaDosen = namaDosen;
-//        this.kodeMatakuliah = kodeMatakuliah;
-//        this.namaMatakuliah = namaMatakuliah;
-//        this.sks = sks;
-//    }
+    public Kehadiran() {
+    }
 
+    public Kehadiran(String idKehadiran, int presensiMahasiswa, int presensiDosen, String status,
+            String nrp, String namaMahasiswa, String idDosen, String namaDosen,
+            String kodeMatakuliah, String namaMatakuliah, int sks) {
+        this.idKehadiran = idKehadiran;
+        this.presensiMahasiswa = presensiMahasiswa;
+        this.presensiDosen = presensiDosen;
+        this.status = status;
+        this.nrp = nrp;
+        this.namaMahasiswa = namaMahasiswa;
+        this.idDosen = idDosen;
+        this.namaDosen = namaDosen;
+        this.kodeMatakuliah = kodeMatakuliah;
+        this.namaMatakuliah = namaMatakuliah;
+        this.sks = sks;
+    }
+    
     public String getIdKehadiran() {
         return idKehadiran;
     }
@@ -164,7 +165,11 @@ public class Kehadiran implements Serializable {
     public void setSks(int sks) {
         this.sks = sks;
     }
-
+    
+    public enum status {
+        Hadir, TidakHadir
+    }
+    
     @Override
     public String toString() {
         return "ID Kehadiran : " + idKehadiran
