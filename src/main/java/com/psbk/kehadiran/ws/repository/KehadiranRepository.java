@@ -23,4 +23,5 @@ public interface KehadiranRepository {
     public Kehadiran getKehadiran(int idKehadiran);
 
     public List<Kehadiran> getKehadirans();
+    
 }

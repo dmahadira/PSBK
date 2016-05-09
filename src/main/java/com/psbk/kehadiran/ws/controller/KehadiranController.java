@@ -33,19 +33,52 @@ public class KehadiranController {
     private KehadiranService kehadiranService;
 
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/kehadiran/{idKehadiran}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Map<String, Object> getKehadiran(@PathVariable("idKehadiran") int idKehadiran) {
+        Map<String, Object> m = new HashMap<>();
+
+        try {
+            Kehadiran kehadiran = kehadiranService.getKehadiran(idKehadiran);
+            
+            m.put("Status", Boolean.TRUE);
+            m.put("Result", kehadiran);
+        } catch (Exception e) {
+            m.put("Message", "Gagal Karena : " + e.getMessage());
+        }
+
+        return m;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/kehadiran", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<Kehadiran> getKehadirans() {
-        return kehadiranService.getKehadirans();
+    public Map<String, Object> getKehadirans() {
+        Map<String, Object> m = new HashMap<>();
+ 
+        try {
+            List<Kehadiran> kehadiranList = kehadiranService.getKehadirans();
+
+            m.put("Status", Boolean.TRUE);
+            m.put("Result", kehadiranList);
+        } catch (Exception e) {
+            m.put("Message", "Gagal Karena : " + e.getMessage());
+        }
+
+        return m;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/kehadiran", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Map<String, Object> save(@RequestBody Kehadiran kehadiran) {
-        kehadiranService.save(kehadiran);
-
         Map<String, Object> m = new HashMap<>();
-        m.put("Success", Boolean.TRUE);
-        m.put("Info", "Data Tersimpan");
+
+        try {
+            kehadiranService.save(kehadiran);
+
+            m.put("Status", Boolean.TRUE);
+            m.put("Message", "Data Berhasil di simpan");
+        } catch (Exception e) {
+            m.put("Message", "Gagal Karena : " + e.getMessage());
+        }
 
         return m;
     }
@@ -53,11 +86,16 @@ public class KehadiranController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/kehadiran", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Map<String, Object> update(@RequestBody Kehadiran kehadiran) {
-        kehadiranService.update(kehadiran);
-
         Map<String, Object> m = new HashMap<>();
-        m.put("Success", Boolean.TRUE);
-        m.put("Info", "Data Berhasil di update");
+
+        try {
+            kehadiranService.update(kehadiran);
+
+            m.put("Status", Boolean.TRUE);
+            m.put("Message", "Data Berhasil di update");
+        } catch (Exception e) {
+            m.put("Message", "Gagal Karena : " + e.getMessage());
+        }
 
         return m;
     }
@@ -65,11 +103,16 @@ public class KehadiranController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/kehadiran/{idKehadiran}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Map<String, Object> delete(@PathVariable("idKehadiran") int idKehadiran) {
-        kehadiranService.delete(kehadiranService.getKehadiran(idKehadiran));
-
         Map<String, Object> m = new HashMap<>();
-        m.put("Success", Boolean.TRUE);
-        m.put("Info", "Data Berhasil di hapus");
+        
+        try {
+            kehadiranService.delete(kehadiranService.getKehadiran(idKehadiran));
+
+            m.put("Status", Boolean.TRUE);
+            m.put("Message", "Data Berhasil di hapus");
+        } catch (Exception e) {
+            m.put("Message", "Gagal Karena : " + e.getMessage());
+        }
 
         return m;
     }

@@ -35,7 +35,8 @@ public class Kehadiran implements Serializable {
     private int presensiDosen;
 
     @Column(name = "status", nullable = false, length = 15)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column(name = "nrp", nullable = false, length = 15)
     private String nrp;
@@ -49,6 +50,9 @@ public class Kehadiran implements Serializable {
     @Column(name = "nama_dosen", nullable = false, length = 40)
     private String namaDosen;
 
+    @Column(name = "kelas", nullable = false, length = 1)
+    private char kelas;
+
     @Column(name = "kode_matakuliah", nullable = false, length = 8)
     private String kodeMatakuliah;
 
@@ -61,8 +65,8 @@ public class Kehadiran implements Serializable {
     public Kehadiran() {
     }
 
-    public Kehadiran(int idKehadiran, int presensiMahasiswa, int presensiDosen, String status,
-            String nrp, String namaMahasiswa, String idDosen, String namaDosen,
+    public Kehadiran(int idKehadiran, int presensiMahasiswa, int presensiDosen, Status status,
+            String nrp, String namaMahasiswa, String idDosen, String namaDosen, char kelas,
             String kodeMatakuliah, String namaMatakuliah, int sks) {
         this.idKehadiran = idKehadiran;
         this.presensiMahasiswa = presensiMahasiswa;
@@ -72,6 +76,7 @@ public class Kehadiran implements Serializable {
         this.namaMahasiswa = namaMahasiswa;
         this.idDosen = idDosen;
         this.namaDosen = namaDosen;
+        this.kelas = kelas;
         this.kodeMatakuliah = kodeMatakuliah;
         this.namaMatakuliah = namaMatakuliah;
         this.sks = sks;
@@ -101,11 +106,11 @@ public class Kehadiran implements Serializable {
         this.presensiDosen = presensiDosen;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -131,6 +136,14 @@ public class Kehadiran implements Serializable {
 
     public void setIdDosen(String idDosen) {
         this.idDosen = idDosen;
+    }
+
+    public char getKelas() {
+        return kelas;
+    }
+
+    public void setKelas(char kelas) {
+        this.kelas = kelas;
     }
 
     public String getNamaDosen() {
@@ -165,6 +178,10 @@ public class Kehadiran implements Serializable {
         this.sks = sks;
     }
 
+    public enum Status {
+        Hadir, TidakHadir
+    }
+
     @Override
     public String toString() {
         return "ID Kehadiran : " + idKehadiran
@@ -175,6 +192,7 @@ public class Kehadiran implements Serializable {
                 + " Nama Mahasiswa : " + namaMahasiswa
                 + " ID Dosen : " + idDosen
                 + " Nama Dosen : " + namaDosen
+                + " Kelas : " + kelas
                 + " Kode Matakuliah : " + presensiDosen
                 + " Nama Matakuliah : " + status
                 + " SKS : " + sks;
