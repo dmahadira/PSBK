@@ -64,7 +64,7 @@ public class KehadiranController {
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/kehadiran/{idKehadiran}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String, Object> delete(@PathVariable("idKehadiran") String idKehadiran) {
+    public Map<String, Object> delete(@PathVariable("idKehadiran") int idKehadiran) {
         kehadiranService.delete(kehadiranService.getKehadiran(idKehadiran));
 
         Map<String, Object> m = new HashMap<>();

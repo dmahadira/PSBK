@@ -37,7 +37,7 @@ public class KehadiranRepositoryImpl implements KehadiranRepository {
     }
 
     @Override
-    public Kehadiran getKehadiran(String idKehadiran) {
+    public Kehadiran getKehadiran(int idKehadiran) {
         return sessionFactory.getCurrentSession().get(Kehadiran.class, idKehadiran);
     }
 

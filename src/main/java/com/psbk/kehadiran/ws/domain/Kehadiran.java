@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,19 +17,19 @@ import javax.persistence.Table;
  *
  * @author Denny
  */
-
 @Entity
 @Table(name = "tb_kehadiran")
 public class Kehadiran implements Serializable {
 
-    @Id @GeneratedValue
-    @Column(name = "id_kehadiran", length =3)
-    private String idKehadiran;
+    @Id
+    @Column(name = "id_kehadiran")
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private int idKehadiran;
 
-    @Column(name = "presensi_mahasiswa", nullable= false)
+    @Column(name = "presensi_mahasiswa", nullable = false)
     private int presensiMahasiswa;
 
-    @Column(name = "presensi_dosen", nullable= false)
+    @Column(name = "presensi_dosen", nullable = false)
     private int presensiDosen;
 
     @Column(name = "status", nullable = false, length = 15)
@@ -59,7 +60,7 @@ public class Kehadiran implements Serializable {
     public Kehadiran() {
     }
 
-    public Kehadiran(String idKehadiran, int presensiMahasiswa, int presensiDosen, String status,
+    public Kehadiran(int idKehadiran, int presensiMahasiswa, int presensiDosen, String status,
             String nrp, String namaMahasiswa, String idDosen, String namaDosen,
             String kodeMatakuliah, String namaMatakuliah, int sks) {
         this.idKehadiran = idKehadiran;
@@ -74,12 +75,12 @@ public class Kehadiran implements Serializable {
         this.namaMatakuliah = namaMatakuliah;
         this.sks = sks;
     }
-    
-    public String getIdKehadiran() {
+
+    public int getIdKehadiran() {
         return idKehadiran;
     }
 
-    public void setIdKehadiran(String idKehadiran) {
+    public void setIdKehadiran(int idKehadiran) {
         this.idKehadiran = idKehadiran;
     }
 
@@ -162,11 +163,10 @@ public class Kehadiran implements Serializable {
     public void setSks(int sks) {
         this.sks = sks;
     }
-    
+
 //    public enum status {
 //        Hadir, TidakHadir
 //    }
-    
     @Override
     public String toString() {
         return "ID Kehadiran : " + idKehadiran

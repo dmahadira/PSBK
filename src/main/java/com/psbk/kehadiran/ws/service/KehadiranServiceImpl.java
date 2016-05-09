@@ -43,7 +43,7 @@ public class KehadiranServiceImpl implements KehadiranService {
     }
 
     @Override
-    public Kehadiran getKehadiran(String idKehadiran) {
+    public Kehadiran getKehadiran(int idKehadiran) {
         return kehadiranRepository.getKehadiran(idKehadiran);
     }
 
