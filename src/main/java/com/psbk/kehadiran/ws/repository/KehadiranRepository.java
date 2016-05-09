@@ -20,7 +20,7 @@ public interface KehadiranRepository {
 
     public void delete(Kehadiran kehadiran);
 
-    public Kehadiran getKehadiran(String idKehadiran);
+    public Kehadiran getKehadiran(int idKehadiran);
 
     public List<Kehadiran> getKehadirans();
 }
