@@ -25,7 +25,7 @@ public class Kehadiran implements Serializable {
 
     @Id
     @Column(name = "id_kehadiran")
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int idKehadiran;
 
     @Column(name = "presensi_mahasiswa", nullable = false)
@@ -164,7 +164,7 @@ public class Kehadiran implements Serializable {
     public void setSks(int sks) {
         this.sks = sks;
     }
-    
+
     @Override
     public String toString() {
         return "ID Kehadiran : " + idKehadiran
