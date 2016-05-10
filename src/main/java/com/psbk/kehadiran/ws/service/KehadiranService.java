@@ -23,5 +23,7 @@ public interface KehadiranService {
     public Kehadiran getKehadiran(int idKehadiran);
 
     public List<Kehadiran> getKehadirans();
+    
+    public double getPersentase(int idKehadiran);
 
 }

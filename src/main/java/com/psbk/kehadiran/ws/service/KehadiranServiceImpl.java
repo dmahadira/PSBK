@@ -51,5 +51,10 @@ public class KehadiranServiceImpl implements KehadiranService {
     public List<Kehadiran> getKehadirans() {
         return kehadiranRepository.getKehadirans();
     }
+    
+    @Override
+    public double getPersentase(int idKehadiran){
+        return kehadiranRepository.getPersentase(idKehadiran);
+    }
 
 }

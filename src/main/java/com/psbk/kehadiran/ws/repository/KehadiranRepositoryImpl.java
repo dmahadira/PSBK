@@ -46,19 +46,30 @@ public class KehadiranRepositoryImpl implements KehadiranRepository {
 
     @Override
     public List<Kehadiran> getKehadirans() {
-//        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Kehadiran.class)
+        return sessionFactory.getCurrentSession().createCriteria(Kehadiran.class).list();
+    }
+
+    @Override
+    public double getPersentase(int idKehadiran){
+        //        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Kehadiran.class)
 //                .setProjection(Projections.projectionList()
-//                    .add(Projections.property("idKehadiran"), "id_kehadiran")
-//                    .add(Projections.property("kodeMatakuliah"), "kode_matakuliah")
-//                    .add(Projections.property("namaMatakuliah"), "nama_matakuliah")
+//                    .add(Projections.property("idKehadiran"), "idKehadiran")
+//                    .add(Projections.property("kodeMatakuliah"), "kodeMatakuliah")
+//                    .add(Projections.property("namaMatakuliah"), "namaMatakuliah")
 //                    .add(Projections.property("kelas"), "kelas")
-//                    .add(Projections.property("presensiMahasiswa"), "presensi_mahasiswa")
-//                    .add(Projections.property("presensiDosen"), "presensi_dosen"))
+//                    .add(Projections.property("presensiMahasiswa"), "presensiMahasiswa")
+//                    .add(Projections.property("presensiDosen"), "presensiDosen"))
 //                .setResultTransformer(Transformers.aliasToBean(Kehadiran.class));
 //        
 //        List<Kehadiran> kehadiranList = cr.list();
 //        return kehadiranList;
-        return sessionFactory.getCurrentSession().createCriteria(Kehadiran.class).list();
-    }
 
+        Kehadiran kehadiran = sessionFactory.getCurrentSession().get(Kehadiran.class, idKehadiran);
+        int presensiMahasiswa = kehadiran.getPresensiMahasiswa();
+        int presensiDosen = kehadiran.getPresensiDosen();
+        
+        double persentase = ((double) presensiMahasiswa/ (double) presensiDosen) * 100; 
+
+        return persentase;
+    }
 }

@@ -24,4 +24,6 @@ public interface KehadiranRepository {
 
     public List<Kehadiran> getKehadirans();
     
+    public double getPersentase(int idKehadiran);
+    
 }

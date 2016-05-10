@@ -10,6 +10,7 @@ import com.psbk.kehadiran.ws.service.KehadiranService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Denny
  */
-
 @RestController
 @RequestMapping(value = "/api")
 public class KehadiranController {
@@ -39,7 +39,7 @@ public class KehadiranController {
 
         try {
             Kehadiran kehadiran = kehadiranService.getKehadiran(idKehadiran);
-            
+
             m.put("Status", Boolean.TRUE);
             m.put("Result", kehadiran);
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class KehadiranController {
     @RequestMapping(value = "/kehadiran", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Map<String, Object> getKehadirans() {
         Map<String, Object> m = new HashMap<>();
- 
+
         try {
             List<Kehadiran> kehadiranList = kehadiranService.getKehadirans();
 
@@ -104,7 +104,7 @@ public class KehadiranController {
     @RequestMapping(value = "/kehadiran/{idKehadiran}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Map<String, Object> delete(@PathVariable("idKehadiran") int idKehadiran) {
         Map<String, Object> m = new HashMap<>();
-        
+
         try {
             kehadiranService.delete(kehadiranService.getKehadiran(idKehadiran));
 
@@ -117,4 +117,35 @@ public class KehadiranController {
         return m;
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/presensi/mhs={idKehadiran}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Map<String, Object> persentaseMahasiswa(@PathVariable("idKehadiran") int idKehadiran) {
+        Map<String, Object> matakuliahMap = new HashMap<>();
+        Map<String, Object> kehadiranMap = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> resultAll= new HashMap<>();
+
+        try {
+            Kehadiran kehadiran = kehadiranService.getKehadiran(idKehadiran);
+            double persentase = kehadiranService.getPersentase(kehadiran.getIdKehadiran());
+
+            matakuliahMap.put("Kode Matakuliah", kehadiran.getKodeMatakuliah());
+            matakuliahMap.put("Nama Matakuliah", kehadiran.getNamaMatakuliah());
+
+            kehadiranMap.put("Kelas", kehadiran.getKelas());
+            kehadiranMap.put("Presensi Mahasiswa", kehadiran.getPresensiMahasiswa());
+            kehadiranMap.put("Presensi Dosen", kehadiran.getPresensiDosen());
+            kehadiranMap.put("Persentase", persentase);
+
+            result.put("Status", Boolean.TRUE);
+            result.put("Matakuliah", matakuliahMap);
+            result.put("Kehadiran", kehadiranMap);
+            
+            resultAll.put("Result", result);
+        } catch (Exception e) {
+            resultAll.put("Message", "Gagal Karena : " + e.getMessage());
+        }
+
+        return resultAll;
+    }
 }
