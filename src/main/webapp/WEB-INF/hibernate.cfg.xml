@@ -10,6 +10,9 @@
         <property name="hibernate.format_sql">true</property>
 
         <mapping class="com.psbk.kehadiran.ws.domain.Kehadiran" />
+        <mapping class="com.psbk.kehadiran.ws.domain.Dosen" />
+        <mapping class="com.psbk.kehadiran.ws.domain.Mahasiswa" />
+        <mapping class="com.psbk.kehadiran.ws.domain.Jadwal" />
 
     </session-factory>
 </hibernate-configuration>

@@ -5,12 +5,15 @@
  */
 package com.psbk.kehadiran.ws.repository;
 
+import com.psbk.kehadiran.ws.domain.Dosen;
+import com.psbk.kehadiran.ws.domain.Jadwal;
 import com.psbk.kehadiran.ws.domain.Kehadiran;
+import com.psbk.kehadiran.ws.domain.Mahasiswa;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
-import org.hibernate.transform.Transformers;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -50,18 +53,50 @@ public class KehadiranRepositoryImpl implements KehadiranRepository {
     }
 
     @Override
-    public double getPersentase(int idKehadiran){
+    public double getPersentase(int idKehadiran) {
         Kehadiran kehadiran = sessionFactory.getCurrentSession().get(Kehadiran.class, idKehadiran);
         int presensiMahasiswa = kehadiran.getPresensiMahasiswa();
         int presensiDosen = kehadiran.getPresensiDosen();
-        
-        double persentase = ((double) presensiMahasiswa/ (double) presensiDosen) * 100; 
+
+        double persentase = ((double) presensiMahasiswa / (double) presensiDosen) * 100;
 
         return persentase;
     }
-    
+
     @Override
-    public Kehadiran getDosen(String idDosen){
-        return sessionFactory.getCurrentSession().get(Kehadiran.class, idDosen);
+    public List<Dosen> getDosen(String idDosen) {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Dosen.class)
+                .setProjection(Projections.projectionList()
+                        .add(Projections.property("idDosen"), "idDosen")
+                        .add(Projections.property("namaDosen"), "namaDosen"))
+                .add(Restrictions.eq("idDosen", idDosen));
+
+        List<Dosen> dosenList = cr.list();
+        return dosenList;
+    }
+
+    @Override
+    public List<Mahasiswa> getMahasiswa(String nrp) {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Jadwal.class)
+                .setProjection(Projections.projectionList()
+                        .add(Projections.property("nrp"), "nrp")
+                        .add(Projections.property("namaMahasiswa"), "namaMahasiswa"))
+                .add(Restrictions.eq("nrp", nrp));
+
+        List<Mahasiswa> mahasiswaList = cr.list();
+        return mahasiswaList;
+    }
+
+    @Override
+    public List<Jadwal> getJadwal(String kodeMatakuliah) {
+        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Jadwal.class)
+                .setProjection(Projections.projectionList()
+                        .add(Projections.property("kodeMatakuliah"), "kodeMatakuliah")
+                        .add(Projections.property("namaMatakuliah"), "namaMatakuliah")
+                        .add(Projections.property("kelas"), "kelas"))
+                .add(Restrictions.eq("kodeMatakuliah", kodeMatakuliah));
+
+        List<Jadwal> jadwalList = cr.list();
+        return jadwalList;
     }
 }

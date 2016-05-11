@@ -5,7 +5,10 @@
  */
 package com.psbk.kehadiran.ws.service;
 
+import com.psbk.kehadiran.ws.domain.Dosen;
+import com.psbk.kehadiran.ws.domain.Jadwal;
 import com.psbk.kehadiran.ws.domain.Kehadiran;
+import com.psbk.kehadiran.ws.domain.Mahasiswa;
 import java.util.List;
 
 /**
@@ -13,7 +16,7 @@ import java.util.List;
  * @author Denny
  */
 public interface KehadiranService {
-    
+
     public void save(Kehadiran kehadiran);
 
     public void update(Kehadiran kehadiran);
@@ -23,8 +26,13 @@ public interface KehadiranService {
     public Kehadiran getKehadiran(int idKehadiran);
 
     public List<Kehadiran> getKehadirans();
-    
+
     public double getPersentase(int idKehadiran);
 
-    public Kehadiran getDosen(String idDosen);
+    public List<Dosen> getDosen(String idDosen);
+
+    public List<Mahasiswa> getMahasiswa(String nrp);
+
+    public List<Jadwal> getJadwal(String kodeMatakuliah);
+
 }

@@ -5,7 +5,9 @@
  */
 package com.psbk.kehadiran.ws.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,8 +15,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -39,48 +43,30 @@ public class Kehadiran implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "nrp", nullable = false, length = 15, unique = true)
-    private String nrp;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Dosen.class, mappedBy = "kehadiran")
+    private List<Dosen> dosenList;
 
-    @Column(name = "nama_mahasiswa", nullable = false, length = 40)
-    private String namaMahasiswa;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Mahasiswa.class, mappedBy = "kehadiran")
+    private List<Mahasiswa> mahasiswaList;
 
-    @Column(name = "id_dosen", nullable = false, length = 15, unique = true)
-    private String idDosen;
-
-    @Column(name = "nama_dosen", nullable = false, length = 40)
-    private String namaDosen;
-
-    @Column(name = "kelas", nullable = false, length = 1)
-    private char kelas;
-
-    @Column(name = "kode_matakuliah", nullable = false, length = 8, unique = true)
-    private String kodeMatakuliah;
-
-    @Column(name = "nama_matakuliah", nullable = false, length = 40)
-    private String namaMatakuliah;
-
-    @Column(name = "sks", nullable = false)
-    private int sks;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(targetEntity = Jadwal.class, mappedBy = "kehadiran")
+    private List<Jadwal> jadwalList;
 
     public Kehadiran() {
     }
 
     public Kehadiran(int idKehadiran, int presensiMahasiswa, int presensiDosen, Status status,
-            String nrp, String namaMahasiswa, String idDosen, String namaDosen, char kelas,
-            String kodeMatakuliah, String namaMatakuliah, int sks) {
+            List<Dosen> dosenList, List<Mahasiswa> mahasiswaList, List<Jadwal> jadwalList) {
         this.idKehadiran = idKehadiran;
         this.presensiMahasiswa = presensiMahasiswa;
         this.presensiDosen = presensiDosen;
         this.status = status;
-        this.nrp = nrp;
-        this.namaMahasiswa = namaMahasiswa;
-        this.idDosen = idDosen;
-        this.namaDosen = namaDosen;
-        this.kelas = kelas;
-        this.kodeMatakuliah = kodeMatakuliah;
-        this.namaMatakuliah = namaMatakuliah;
-        this.sks = sks;
+        this.dosenList = dosenList;
+        this.mahasiswaList = mahasiswaList;
+        this.jadwalList = jadwalList;
     }
 
     public int getIdKehadiran() {
@@ -115,87 +101,35 @@ public class Kehadiran implements Serializable {
         this.status = status;
     }
 
-    public String getNrp() {
-        return nrp;
+    @JsonManagedReference
+    public List<Dosen> getDosenList() {
+        return dosenList;
     }
 
-    public void setNrp(String nrp) {
-        this.nrp = nrp;
+    public void setDosenList(List<Dosen> dosenList) {
+        this.dosenList = dosenList;
     }
 
-    public String getNamaMahasiswa() {
-        return namaMahasiswa;
+    @JsonManagedReference
+    public List<Mahasiswa> getMahasiswaList() {
+        return mahasiswaList;
     }
 
-    public void setNamaMahasiswa(String namaMahasiswa) {
-        this.namaMahasiswa = namaMahasiswa;
+    public void setMahasiswaList(List<Mahasiswa> mahasiswaList) {
+        this.mahasiswaList = mahasiswaList;
     }
 
-    public String getIdDosen() {
-        return idDosen;
+    @JsonManagedReference
+    public List<Jadwal> getJadwalList() {
+        return jadwalList;
     }
 
-    public void setIdDosen(String idDosen) {
-        this.idDosen = idDosen;
-    }
-
-    public char getKelas() {
-        return kelas;
-    }
-
-    public void setKelas(char kelas) {
-        this.kelas = kelas;
-    }
-
-    public String getNamaDosen() {
-        return namaDosen;
-    }
-
-    public void setNamaDosen(String namaDosen) {
-        this.namaDosen = namaDosen;
-    }
-
-    public String getKodeMatakuliah() {
-        return kodeMatakuliah;
-    }
-
-    public void setKodeMatakuliah(String kodeMatakuliah) {
-        this.kodeMatakuliah = kodeMatakuliah;
-    }
-
-    public String getNamaMatakuliah() {
-        return namaMatakuliah;
-    }
-
-    public void setNamaMatakuliah(String namaMatakuliah) {
-        this.namaMatakuliah = namaMatakuliah;
-    }
-
-    public int getSks() {
-        return sks;
-    }
-
-    public void setSks(int sks) {
-        this.sks = sks;
+    public void setJadwalList(List<Jadwal> jadwalList) {
+        this.jadwalList = jadwalList;
     }
 
     public enum Status {
         Hadir, TidakHadir
     }
 
-    @Override
-    public String toString() {
-        return "ID Kehadiran : " + idKehadiran
-                + " Presensi Mahasiswa : " + presensiMahasiswa
-                + " Presensi Dosen : " + presensiDosen
-                + " Status : " + status
-                + " NRP : " + nrp
-                + " Nama Mahasiswa : " + namaMahasiswa
-                + " ID Dosen : " + idDosen
-                + " Nama Dosen : " + namaDosen
-                + " Kelas : " + kelas
-                + " Kode Matakuliah : " + presensiDosen
-                + " Nama Matakuliah : " + status
-                + " SKS : " + sks;
-    }
 }
