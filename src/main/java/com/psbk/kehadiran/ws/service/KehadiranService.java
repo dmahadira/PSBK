@@ -26,4 +26,5 @@ public interface KehadiranService {
     
     public double getPersentase(int idKehadiran);
 
+    public Kehadiran getDosen(String idDosen);
 }

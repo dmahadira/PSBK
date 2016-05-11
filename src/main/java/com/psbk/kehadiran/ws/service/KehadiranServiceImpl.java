@@ -16,9 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Denny
  */
-
 @Service
-@Transactional(readOnly =true)
+@Transactional(readOnly = true)
 public class KehadiranServiceImpl implements KehadiranService {
 
     @Autowired
@@ -51,10 +50,13 @@ public class KehadiranServiceImpl implements KehadiranService {
     public List<Kehadiran> getKehadirans() {
         return kehadiranRepository.getKehadirans();
     }
-    
+
     @Override
-    public double getPersentase(int idKehadiran){
+    public double getPersentase(int idKehadiran) {
         return kehadiranRepository.getPersentase(idKehadiran);
     }
 
+    public Kehadiran getDosen(String idDosen) {
+        return kehadiranRepository.getDosen(idDosen);
+    }
 }

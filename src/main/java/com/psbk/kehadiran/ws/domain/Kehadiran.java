@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  *
@@ -38,13 +39,13 @@ public class Kehadiran implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "nrp", nullable = false, length = 15)
+    @Column(name = "nrp", nullable = false, length = 15, unique = true)
     private String nrp;
 
     @Column(name = "nama_mahasiswa", nullable = false, length = 40)
     private String namaMahasiswa;
 
-    @Column(name = "id_dosen", nullable = false, length = 15)
+    @Column(name = "id_dosen", nullable = false, length = 15, unique = true)
     private String idDosen;
 
     @Column(name = "nama_dosen", nullable = false, length = 40)
@@ -53,7 +54,7 @@ public class Kehadiran implements Serializable {
     @Column(name = "kelas", nullable = false, length = 1)
     private char kelas;
 
-    @Column(name = "kode_matakuliah", nullable = false, length = 8)
+    @Column(name = "kode_matakuliah", nullable = false, length = 8, unique = true)
     private String kodeMatakuliah;
 
     @Column(name = "nama_matakuliah", nullable = false, length = 40)

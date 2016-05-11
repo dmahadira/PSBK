@@ -118,34 +118,38 @@ public class KehadiranController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/presensi/mhs={idKehadiran}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String, Object> persentaseMahasiswa(@PathVariable("idKehadiran") int idKehadiran) {
-        Map<String, Object> matakuliahMap = new HashMap<>();
-        Map<String, Object> kehadiranMap = new HashMap<>();
+    @RequestMapping(value = "/presensi/id={idKehadiran}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Map<String, Object> getPersentase(@PathVariable("idKehadiran") int idKehadiran) {
         Map<String, Object> result = new HashMap<>();
-        Map<String, Object> resultAll= new HashMap<>();
 
         try {
             Kehadiran kehadiran = kehadiranService.getKehadiran(idKehadiran);
             double persentase = kehadiranService.getPersentase(kehadiran.getIdKehadiran());
 
-            matakuliahMap.put("Kode Matakuliah", kehadiran.getKodeMatakuliah());
-            matakuliahMap.put("Nama Matakuliah", kehadiran.getNamaMatakuliah());
+            result.put("Persentase", persentase);
 
-            kehadiranMap.put("Kelas", kehadiran.getKelas());
-            kehadiranMap.put("Presensi Mahasiswa", kehadiran.getPresensiMahasiswa());
-            kehadiranMap.put("Presensi Dosen", kehadiran.getPresensiDosen());
-            kehadiranMap.put("Persentase", persentase);
-
-            result.put("Status", Boolean.TRUE);
-            result.put("Matakuliah", matakuliahMap);
-            result.put("Kehadiran", kehadiranMap);
-            
-            resultAll.put("Result", result);
+            result.put("Result", result);
         } catch (Exception e) {
-            resultAll.put("Message", "Gagal Karena : " + e.getMessage());
+            result.put("Message", "Gagal Karena : " + e.getMessage());
         }
 
-        return resultAll;
+        return result;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/kehadiran/dosen/id={idDosen}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Map<String, Object> getDosen(@PathVariable("idDosen") String idDosen) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            Kehadiran kehadiran = kehadiranService.getDosen(idDosen);
+            result.put("Result", kehadiran);
+
+            result.put("Result", result);
+        } catch (Exception e) {
+            result.put("Message", "Gagal Karena : " + e.getMessage());
+        }
+
+        return result;
     }
 }
