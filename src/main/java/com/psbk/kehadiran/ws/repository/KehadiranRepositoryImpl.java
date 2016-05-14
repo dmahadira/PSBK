@@ -5,12 +5,13 @@
  */
 package com.psbk.kehadiran.ws.repository;
 
-import com.psbk.kehadiran.ws.domain.Dosen;
 import com.psbk.kehadiran.ws.domain.Jadwal;
 import com.psbk.kehadiran.ws.domain.Kehadiran;
-import com.psbk.kehadiran.ws.domain.Mahasiswa;
+import com.psbk.kehadiran.ws.domain.KehadiranMahasiswa;
+import com.psbk.kehadiran.ws.domain.Matakuliah;
 import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -52,51 +53,38 @@ public class KehadiranRepositoryImpl implements KehadiranRepository {
         return sessionFactory.getCurrentSession().createCriteria(Kehadiran.class).list();
     }
 
+//    @Override
+//    public List<Jadwal> getJadwal(String kodeMatakuliah) {
+//        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Jadwal.class)
+//                .setProjection(Projections.projectionList()
+//                        .add(Projections.property("kodeMatakuliah"), "kodeMatakuliah")
+//                        .add(Projections.property("namaMatakuliah"), "namaMatakuliah")
+//                        .add(Projections.property("kelas"), "kelas"))
+//                .add(Restrictions.eq("kodeMatakuliah", kodeMatakuliah));
+//
+//        List<Jadwal> jadwalList = cr.list();
+//        return jadwalList;
+//    }
+//
     @Override
     public double getPersentase(int idKehadiran) {
         Kehadiran kehadiran = sessionFactory.getCurrentSession().get(Kehadiran.class, idKehadiran);
-        int presensiMahasiswa = kehadiran.getPresensiMahasiswa();
-        int presensiDosen = kehadiran.getPresensiDosen();
+        int presensi = kehadiran.getPresensi();
+        int presensiTotal = kehadiran.getPresensiTotal();
 
-        double persentase = ((double) presensiMahasiswa / (double) presensiDosen) * 100;
+        double persentase = ((double) presensi / (double) presensiTotal) * 100;
 
         return persentase;
     }
 
     @Override
-    public List<Dosen> getDosen(String idDosen) {
-        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Dosen.class)
-                .setProjection(Projections.projectionList()
-                        .add(Projections.property("idDosen"), "idDosen")
-                        .add(Projections.property("namaDosen"), "namaDosen"))
-                .add(Restrictions.eq("idDosen", idDosen));
+    public List<KehadiranMahasiswa> presensiMatkul() {
+        String hql = "select m.namaMatakuliah from Matakuliah m inner join KehadiranMahasiswa km on m.idMatakuliah = km.matakuliah";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
 
-        List<Dosen> dosenList = cr.list();
-        return dosenList;
-    }
+        List<KehadiranMahasiswa> kehadiranMahasiswaList = query.list();
+        
 
-    @Override
-    public List<Mahasiswa> getMahasiswa(String nrp) {
-        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Jadwal.class)
-                .setProjection(Projections.projectionList()
-                        .add(Projections.property("nrp"), "nrp")
-                        .add(Projections.property("namaMahasiswa"), "namaMahasiswa"))
-                .add(Restrictions.eq("nrp", nrp));
-
-        List<Mahasiswa> mahasiswaList = cr.list();
-        return mahasiswaList;
-    }
-
-    @Override
-    public List<Jadwal> getJadwal(String kodeMatakuliah) {
-        Criteria cr = sessionFactory.getCurrentSession().createCriteria(Jadwal.class)
-                .setProjection(Projections.projectionList()
-                        .add(Projections.property("kodeMatakuliah"), "kodeMatakuliah")
-                        .add(Projections.property("namaMatakuliah"), "namaMatakuliah")
-                        .add(Projections.property("kelas"), "kelas"))
-                .add(Restrictions.eq("kodeMatakuliah", kodeMatakuliah));
-
-        List<Jadwal> jadwalList = cr.list();
-        return jadwalList;
+        return kehadiranMahasiswaList;
     }
 }

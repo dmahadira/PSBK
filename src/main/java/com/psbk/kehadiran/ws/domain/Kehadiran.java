@@ -5,6 +5,7 @@
  */
 package com.psbk.kehadiran.ws.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +16,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -25,48 +29,50 @@ import org.hibernate.annotations.LazyCollectionOption;
  * @author Denny
  */
 @Entity
-@Table(name = "tb_kehadiran")
+@Table(name = "kehadiran")
 public class Kehadiran implements Serializable {
 
     @Id
-    @Column(name = "id_kehadiran")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "idKehadiran")
+    @SequenceGenerator(name = "pk_sequence", sequenceName = "entity_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pk_sequence")
     private int idKehadiran;
 
-    @Column(name = "presensi_mahasiswa", nullable = false)
-    private int presensiMahasiswa;
+    @Column(name = "presensi", nullable = false)
+    private int presensi;
 
-    @Column(name = "presensi_dosen", nullable = false)
-    private int presensiDosen;
+    @Column(name = "presensiTotal", nullable = false)
+    private int presensiTotal;
 
-    @Column(name = "status", nullable = false, length = 15)
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(name = "idDosen", nullable = false, length = 5, unique = true)
+    private String idDosen;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Dosen.class, mappedBy = "kehadiran")
-    private List<Dosen> dosenList;
+    @Column(name = "namaDosen", nullable = false, length = 40)
+    private String namaDosen;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Mahasiswa.class, mappedBy = "kehadiran")
-    private List<Mahasiswa> mahasiswaList;
+    @Column(name = "status", nullable = false, length = 150)
+    private String status;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(targetEntity = Jadwal.class, mappedBy = "kehadiran")
-    private List<Jadwal> jadwalList;
+    @OneToMany(targetEntity = KehadiranMahasiswa.class, mappedBy = "kehadiran")
+    private List<KehadiranMahasiswa> kehadiranMahasiswaList;
+
+    @ManyToOne
+    @JoinColumn(name = "idJadwal")
+    private Jadwal jadwal;
 
     public Kehadiran() {
     }
 
-    public Kehadiran(int idKehadiran, int presensiMahasiswa, int presensiDosen, Status status,
-            List<Dosen> dosenList, List<Mahasiswa> mahasiswaList, List<Jadwal> jadwalList) {
+    public Kehadiran(int idKehadiran, int presensi, int presensiTotal, String idDosen, String namaDosen, String status, List<KehadiranMahasiswa> kehadiranMahasiswaList, Jadwal jadwal) {
         this.idKehadiran = idKehadiran;
-        this.presensiMahasiswa = presensiMahasiswa;
-        this.presensiDosen = presensiDosen;
+        this.presensi = presensi;
+        this.presensiTotal = presensiTotal;
+        this.idDosen = idDosen;
+        this.namaDosen = namaDosen;
         this.status = status;
-        this.dosenList = dosenList;
-        this.mahasiswaList = mahasiswaList;
-        this.jadwalList = jadwalList;
+        this.kehadiranMahasiswaList = kehadiranMahasiswaList;
+        this.jadwal = jadwal;
     }
 
     public int getIdKehadiran() {
@@ -77,59 +83,62 @@ public class Kehadiran implements Serializable {
         this.idKehadiran = idKehadiran;
     }
 
-    public int getPresensiMahasiswa() {
-        return presensiMahasiswa;
+    public int getPresensi() {
+        return presensi;
     }
 
-    public void setPresensiMahasiswa(int presensiMahasiswa) {
-        this.presensiMahasiswa = presensiMahasiswa;
+    public void setPresensi(int presensi) {
+        this.presensi = presensi;
     }
 
-    public int getPresensiDosen() {
-        return presensiDosen;
+    public int getPresensiTotal() {
+        return presensiTotal;
     }
 
-    public void setPresensiDosen(int presensiDosen) {
-        this.presensiDosen = presensiDosen;
+    public void setPresensiTotal(int presensiTotal) {
+        this.presensiTotal = presensiTotal;
     }
 
-    public Status getStatus() {
+    public String getIdDosen() {
+        return idDosen;
+    }
+
+    public void setIdDosen(String idDosen) {
+        this.idDosen = idDosen;
+    }
+
+    public String getNamaDosen() {
+        return namaDosen;
+    }
+
+    public void setNamaDosen(String namaDosen) {
+        this.namaDosen = namaDosen;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
     @JsonManagedReference
-    public List<Dosen> getDosenList() {
-        return dosenList;
+    public List<KehadiranMahasiswa> getKehadiranMahasiswaList() {
+        return kehadiranMahasiswaList;
     }
 
-    public void setDosenList(List<Dosen> dosenList) {
-        this.dosenList = dosenList;
+    public void setKehadiranMahasiswaList(List<KehadiranMahasiswa> kehadiranMahasiswaList) {
+        this.kehadiranMahasiswaList = kehadiranMahasiswaList;
     }
 
-    @JsonManagedReference
-    public List<Mahasiswa> getMahasiswaList() {
-        return mahasiswaList;
+    @JsonBackReference
+    public Jadwal getJadwal() {
+        return jadwal;
     }
 
-    public void setMahasiswaList(List<Mahasiswa> mahasiswaList) {
-        this.mahasiswaList = mahasiswaList;
-    }
-
-    @JsonManagedReference
-    public List<Jadwal> getJadwalList() {
-        return jadwalList;
-    }
-
-    public void setJadwalList(List<Jadwal> jadwalList) {
-        this.jadwalList = jadwalList;
-    }
-
-    public enum Status {
-        Hadir, TidakHadir
+    public void setJadwal(Jadwal jadwal) {
+        this.jadwal = jadwal;
     }
 
 }

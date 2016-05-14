@@ -5,10 +5,10 @@
  */
 package com.psbk.kehadiran.ws.service;
 
-import com.psbk.kehadiran.ws.domain.Dosen;
 import com.psbk.kehadiran.ws.domain.Jadwal;
 import com.psbk.kehadiran.ws.domain.Kehadiran;
-import com.psbk.kehadiran.ws.domain.Mahasiswa;
+import com.psbk.kehadiran.ws.domain.KehadiranMahasiswa;
+import com.psbk.kehadiran.ws.domain.Matakuliah;
 import com.psbk.kehadiran.ws.repository.KehadiranRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,17 +60,8 @@ public class KehadiranServiceImpl implements KehadiranService {
     }
 
     @Override
-    public List<Dosen> getDosen(String idDosen) {
-        return kehadiranRepository.getDosen(idDosen);
+    public List<KehadiranMahasiswa> presensiMatkul() {
+        return kehadiranRepository.presensiMatkul();
     }
-    
-    @Override
-    public List<Mahasiswa> getMahasiswa(String nrp) {
-        return kehadiranRepository.getMahasiswa(nrp);
-    }
-    
-    @Override
-    public List<Jadwal> getJadwal(String kodeMatakuliah) {
-        return kehadiranRepository.getJadwal(kodeMatakuliah);
-    }
+
 }

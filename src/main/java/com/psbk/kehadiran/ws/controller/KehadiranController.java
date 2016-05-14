@@ -5,15 +5,16 @@
  */
 package com.psbk.kehadiran.ws.controller;
 
-import com.psbk.kehadiran.ws.domain.Dosen;
 import com.psbk.kehadiran.ws.domain.Jadwal;
 import com.psbk.kehadiran.ws.domain.Kehadiran;
-import com.psbk.kehadiran.ws.domain.Mahasiswa;
+import com.psbk.kehadiran.ws.domain.KehadiranMahasiswa;
+import com.psbk.kehadiran.ws.domain.Matakuliah;
 import com.psbk.kehadiran.ws.service.KehadiranService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.core.convert.TypeDescriptor.array;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -120,71 +121,38 @@ public class KehadiranController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/kehadiran/presensi", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public Map<String, Object> presensiMatkul() {
+        Map<String, Object> m = new HashMap<>();
+
+        try {
+            List<KehadiranMahasiswa> kehadiranMahasiswaList = kehadiranService.presensiMatkul();
+
+            m.put("Status", Boolean.TRUE);
+            m.put("Matakuliah", kehadiranMahasiswaList);
+
+        } catch (Exception e) {
+            m.put("Message", "Gagal Karena : " + e.getMessage());
+        }
+
+        return m;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/kehadiran/presensi/id={idKehadiran}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Map<String, Object> getPersentase(@PathVariable("idKehadiran") int idKehadiran) {
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> m = new HashMap<>();
 
         try {
-            Kehadiran kehadiran = kehadiranService.getKehadiran(idKehadiran);
-            double persentase = kehadiranService.getPersentase(kehadiran.getIdKehadiran());
+            double persentase = kehadiranService.getPersentase(idKehadiran);
 
-            result.put("Status", Boolean.TRUE);
-            result.put("Persentase", persentase);
+            m.put("Status", Boolean.TRUE);
+            m.put("Persentase", persentase);
+
         } catch (Exception e) {
-            result.put("Message", "Gagal Karena : " + e.getMessage());
+            m.put("Message", "Gagal Karena : " + e.getMessage());
         }
 
-        return result;
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/kehadiran/dosen/id={idDosen}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String, Object> getDosen(@PathVariable("idDosen") String idDosen) {
-        Map<String, Object> result = new HashMap<>();
-
-        try {
-            List<Dosen> dosenList = kehadiranService.getDosen(idDosen);
-
-            result.put("Status", Boolean.TRUE);
-            result.put("Result", dosenList);
-        } catch (Exception e) {
-            result.put("Message", "Gagal Karena : " + e.getMessage());
-        }
-
-        return result;
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/kehadiran/mahasiswa/id={nrp}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String, Object> getMahasiswa(@PathVariable("nrp") String nrp) {
-        Map<String, Object> result = new HashMap<>();
-
-        try {
-            List<Mahasiswa> mahasiswaList = kehadiranService.getMahasiswa(nrp);
-
-            result.put("Status", Boolean.TRUE);
-            result.put("Result", mahasiswaList);
-        } catch (Exception e) {
-            result.put("Message", "Gagal Karena : " + e.getMessage());
-        }
-
-        return result;
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/kehadiran/jadwal/id={kodeMatakuliah}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Map<String, Object> getJadwal(@PathVariable("kodeMatakuliah") String kodeMatakuliah) {
-        Map<String, Object> result = new HashMap<>();
-
-        try {
-            List<Jadwal> jadwalList = kehadiranService.getJadwal(kodeMatakuliah);
-
-            result.put("Status", Boolean.TRUE);
-            result.put("Result", jadwalList);
-        } catch (Exception e) {
-            result.put("Message", "Gagal Karena : " + e.getMessage());
-        }
-
-        return result;
+        return m;
     }
 }

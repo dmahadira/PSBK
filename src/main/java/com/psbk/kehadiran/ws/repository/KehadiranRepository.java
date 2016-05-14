@@ -5,10 +5,9 @@
  */
 package com.psbk.kehadiran.ws.repository;
 
-import com.psbk.kehadiran.ws.domain.Dosen;
-import com.psbk.kehadiran.ws.domain.Jadwal;
 import com.psbk.kehadiran.ws.domain.Kehadiran;
-import com.psbk.kehadiran.ws.domain.Mahasiswa;
+import com.psbk.kehadiran.ws.domain.KehadiranMahasiswa;
+import com.psbk.kehadiran.ws.domain.Matakuliah;
 import java.util.List;
 
 /**
@@ -26,13 +25,10 @@ public interface KehadiranRepository {
     public Kehadiran getKehadiran(int idKehadiran);
 
     public List<Kehadiran> getKehadirans();
-
+    
     public double getPersentase(int idKehadiran);
 
-    public List<Dosen> getDosen(String idKehadiran);
+    public List<KehadiranMahasiswa> presensiMatkul();
 
-    public List<Mahasiswa> getMahasiswa(String nrp);
-
-    public List<Jadwal> getJadwal(String kodeMatakuliah);
-
+//    public List<KehadiranMahasiswa> allPresensiMatkul();
 }
